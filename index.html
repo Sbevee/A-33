@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Question</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffeef2;
+            overflow: hidden;
+            text-align: center;
+        }
+        .container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 400px;
+            z-index: 10;
+        }
+        h1 { color: #d63384; line-height: 1.4; }
+        p { color: #555; font-size: 1.1rem; }
+        input {
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #ffcad4;
+            margin-bottom: 15px;
+            width: 80%;
+            outline: none;
+        }
+        button {
+            padding: 12px 28px;
+            font-size: 1rem;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.1s;
+        }
+        #yesBtn { background-color: #ff4d6d; color: white; }
+        #yesBtn:active { transform: scale(0.95); }
+        #noBtn { 
+            background-color: #6c757d; 
+            color: white; 
+            position: absolute; 
+            transition: 0.1s ease-out;
+        }
+        .hidden { display: none; }
+
+        /* Falling Hearts Animation */
+        .heart {
+            position: fixed;
+            top: -10%;
+            color: #ff4d6d;
+            font-size: 20px;
+            user-select: none;
+            z-index: 1;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) translateX(20px) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="step1">
+        <h1>Hey there! ❤️</h1>
+        <p>Before we start, what's your name?</p>
+        <input type="text" id="nameInput" placeholder="Your name...">
+        <br>
+        <button id="nextBtn" onclick="showQuestion()" style="background:#ff4d6d; color:white;">Next</button>
+    </div>
+
+    <div class="container hidden" id="step2">
+        <h1 id="questionText"></h1>
+        <div style="margin-top: 60px;">
+            <button id="yesBtn" onclick="celebrate()">YES</button>
+            <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">NO</button>
+        </div>
+    </div>
+
+    <div class="container hidden" id="step3">
+        <h1>Yay! ❤️</h1>
+        <p>I knew you'd say yes!<br>
+           I love you baby.<br>
+           Have an amazing Valentiness (with me ofc)</p>
+        <p><strong>- Your Stevie</strong></p>
+        <div style="font-size: 50px;">🌹🥰✨</div>
+    </div>
+
+    <script>
+        function showQuestion() {
+            const name = document.getElementById('nameInput').value;
+            if (name.trim() === "") return alert("I need your name first! 😉");
+            
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+            document.getElementById('questionText').innerText = name + ", will you be my Valentine?";
+        }
+
+        function moveButton() {
+            const noBtn = document.getElementById('noBtn');
+            // Ensure button doesn't go off-screen
+            const maxX = window.innerWidth - noBtn.offsetWidth;
+            const maxY = window.innerHeight - noBtn.offsetHeight;
+            
+            const x = Math.random() * maxX;
+            const y = Math.random() * maxY;
+            
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
+
+        function celebrate() {
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.remove('hidden');
+            startHearts();
+        }
+
+        function startHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                heart.style.opacity = Math.random();
+                document.body.appendChild(heart);
+                
+                // Remove heart after it falls to keep the page light
+                setTimeout(() => { heart.remove(); }, 5000);
+            }, 300);
+        }
+    </script>
+</body>
+</html>
